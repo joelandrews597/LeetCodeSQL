@@ -1,0 +1,8 @@
+--https://leetcode.com/problems/managers-with-at-least-5-direct-reports
+
+SELECT e.name 
+FROM employee m
+JOIN employee e
+  ON m.Id = e.ManagerId  
+GROUP BY e.name
+HAVING COUNT(e.name) >= 5
