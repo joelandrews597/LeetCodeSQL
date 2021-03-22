@@ -1,0 +1,12 @@
+-- https://leetcode.com/problems/all-people-report-to-the-given-manager
+
+SELECT
+  e.employee_id
+FROM employees b -- Boss
+JOIN employees m -- Directs reports to Boss (b)
+  ON b.employee_id = m.manager_id
+  AND b.employee_id = 1
+JOIN employees e -- Reports to Manager (m)
+  ON e.manager_id = m.employee_id
+  AND e.manager_id = ! 1
+
