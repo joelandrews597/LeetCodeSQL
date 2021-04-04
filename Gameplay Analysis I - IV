@@ -1,0 +1,30 @@
+--https://leetcode.com/problems/game-play-analysis-i/description/
+
+-- Gameplay Analysis I
+
+SELECT player_id, min(event_date) as first_login
+FROM Activity
+GROUP BY player_id
+
+-- Gameplay Analysis II
+
+SELECT player_id, device_id
+FROM activity 
+WHERE (player_id, event_date) IN ( SELECT player_id, MIN(event_date) AS first_login FROM activity GROUP BY player_id)
+
+-- Gameplay Analysis III	
+
+SELECT player_id, event_date, SUM(games_played) OVER (PARTITION BY player_id ORDER BY event_date) as games_played_so_far
+FROM activity
+
+-- Gameplay Analysis IV
+
+WITH first_logins AS(
+	SELECT player_id, min(event_date) as first_login
+	FROM activity
+	GROUP BY player_id)
+
+SELECT ROUND(SUM(CASE WHEN a.event_date = f.first_login + 1 THEN 1 END)/COUNT(DISTINCT a.player_id),2) as fraction
+FROM activity a
+JOIN first_logins f
+ON a.player_id = f.player_id
