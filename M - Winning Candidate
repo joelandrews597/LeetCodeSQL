@@ -1,0 +1,11 @@
+-- https://leetcode.com/problems/winning-candidate
+
+SELECT Name
+FROM (
+		SELECT Name, COUNT(CandidateId) as Votes, ROW_NUMBER() OVER (ORDER BY COUNT(CandidateId) DESC) AS rn
+		FROM Vote v
+		JOIN Candidate c
+			ON v.CandidateId = c.id
+		GROUP BY Name
+	)b
+WHERE rn = 1
