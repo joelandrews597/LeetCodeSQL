@@ -1,0 +1,6 @@
+-- https://leetcode.com/problems/second-degree-follower
+
+SELECT followee as follower, COUNT(follower) AS num
+FROM follow
+WHERE followee IN (SELECT follower FROM follow)
+GROUP BY followee;	
