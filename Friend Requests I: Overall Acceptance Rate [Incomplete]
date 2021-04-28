@@ -1,0 +1,21 @@
+-- https://leetcode.com/problems/friend-requests-i-overall-acceptance-rate/ [Incomplete]
+
+with requested as (SELECT COUNT(*) as request FROM (SELECT DISTINCT sender_id, send_to_id FROM friend_request)a),
+accepted as (SELECT COUNT(*) as accept FROM (SELECT DISTINCT requester_id, accepter_id FROM request_accepted)b)
+
+SELECT COALESCE(ROUND((accept*1.0/request),2),0.0) as accept_rate
+FROM requested, accepted 
+
+
+# Follow-up 1: return the accept rate for every month
+
+with requested as (SELECT (SELECT COUNT(*) as request FROM (SELECT DISTINCT sender_id, send_to_id FROM friend_request)) as cnt, MONTH(request_date) as request_date FROM friend_request GROUP BY MONTH(request_date)),
+accepted as (SELECT (SELECT COUNT(*) as accept FROM (SELECT DISTINCT requester_id, accepter_id FROM request_accepted)) as cnt, MONTH(accept_date) as accept_date FROM request_accepted GROUP BY MONTH(accept_date))
+
+SELECT  
+  acp.accept_date as month, 
+  COALESCE(ROUND((acp.cnt *1.0/ req.cnt), 2),0.0) as accept_rate
+FROM accepted acp 
+JOIN requested req 
+  ON acp.accept_date = req.request_date 
+GROUP BY acp.accept_date
