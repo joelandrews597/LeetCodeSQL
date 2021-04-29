@@ -1,0 +1,25 @@
+-- Product Sales Analysis I
+-- https://leetcode.com/problems/product-sales-analysis-i/description/
+
+SELECT product_name, year, price
+FROM Sales s 
+JOIN Product p
+on p.product_id = s.product_id;
+
+-- Product Sales Analysis II
+-- https://leetcode.com/problems/product-sales-analysis-ii/description/
+
+SELECT product_id, SUM(quantity) as total_quantity
+FROM Sales
+GROUP BY product_id;
+
+-- Product Sales Analysis III
+-- https://leetcode.com/problems/product-sales-analysis-iii/description/
+
+SELECT 
+  product_id,
+  MIN(year) as first_year,
+  quantity,
+  price
+FROM sales
+GROUP BY product_id;
