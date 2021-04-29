@@ -1,0 +1,32 @@
+-- Project Employees I
+-- https://leetcode.com/problems/project-employees-i/description/
+
+SELECT project_id, ROUND(AVG(experience_years), 2) as average_years
+FROM Project p
+JOIN Employee e
+  ON p.employee_id = e.employee_id
+GROUP BY project_id
+
+-- Project Employees II
+-- https://leetcode.com/problems/project-employees-ii/description/
+
+SELECT project_id 
+FROM(
+	SELECT project_id, COUNT(*) as employees
+	FROM project 
+	GROUP BY project_id
+	ORDER BY employees DESC
+	LIMIT 1
+	)a
+  
+-- Project Employees III
+-- https://leetcode.com/problems/project-employees-iii/description/
+
+SELECT project_id, employee_id
+FROM(
+	SELECT project_id, p.employee_id, experience_years, DENSE_RANK() OVER (PARTITION BY project_id ORDER BY experience_years DESC) as rnk
+	FROM project p
+	JOIN employees e
+		ON p.employee_id = e.employee_id
+	)a
+WHERE rnk = 1
